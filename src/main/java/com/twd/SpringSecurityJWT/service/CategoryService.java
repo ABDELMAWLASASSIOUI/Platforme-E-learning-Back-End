@@ -26,6 +26,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    /*
     public Category updateCategory(Long id, Category category) {
         if (categoryRepository.existsById(id)) {
             category.setId(id);
@@ -35,7 +36,29 @@ public class CategoryService {
         }
     }
 
-    public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
+     */
+    public String updateCategory(Long id, Category categoryDetails) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+
+        if (optionalCategory.isPresent()) {
+            Category category = optionalCategory.get();
+            category.setName(categoryDetails.getName());
+            categoryRepository.save(category);
+            return "Category updated successfully!";
+        } else {
+            return "Category not found!";
+        }
+    }
+
+
+    public boolean deleteCategory(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+
+        if (categoryOptional.isPresent()) {
+            categoryRepository.deleteById(id);
+            return true; // Deletion was successful
+        } else {
+            return false; // Category not found, deletion failed
+        }
     }
 }

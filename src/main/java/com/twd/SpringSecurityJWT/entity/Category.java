@@ -2,6 +2,8 @@ package com.twd.SpringSecurityJWT.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.util.Set;
 
@@ -21,6 +23,7 @@ public class Category {
     }
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Course> courses;
 
     public Category() {
