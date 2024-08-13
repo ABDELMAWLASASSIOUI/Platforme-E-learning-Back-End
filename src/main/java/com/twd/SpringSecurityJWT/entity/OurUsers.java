@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -19,6 +20,12 @@ public class OurUsers implements UserDetails {
     private Integer id;
     private String email;
     private String password;
+
+
+
+    private String image;
+    private String address;
+    private Date birth_date;
     private String role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -49,5 +56,12 @@ public class OurUsers implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

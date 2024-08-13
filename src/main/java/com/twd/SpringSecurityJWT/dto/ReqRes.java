@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.twd.SpringSecurityJWT.entity.OurUsers;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,4 +24,7 @@ public class ReqRes {
     private String role;
     private String password;
     private OurUsers ourUsers;
+    private String image;
+    private String address;
+    private Date birth_date;
 }

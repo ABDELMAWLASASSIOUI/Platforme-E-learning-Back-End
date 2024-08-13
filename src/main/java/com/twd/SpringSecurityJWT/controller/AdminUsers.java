@@ -1,20 +1,30 @@
 package com.twd.SpringSecurityJWT.controller;
 
 import com.twd.SpringSecurityJWT.dto.ReqRes;
+import com.twd.SpringSecurityJWT.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AdminUsers {
 
+    @Autowired
+    private AuthService authService;
 
+    @PutMapping("/user/update-profile/{id}")
+    public ResponseEntity<ReqRes> updateProfile(@PathVariable Integer id, @RequestBody ReqRes updateRequest) {
+        ReqRes response = authService.updateProfile(id, updateRequest);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
 
+    @DeleteMapping("/user/delete-user/{id}")
+    public ResponseEntity<ReqRes> deleteUser(@PathVariable Integer id) {
+        ReqRes response = authService.deleteUser(id);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
 
 
     @GetMapping("/user/alone")

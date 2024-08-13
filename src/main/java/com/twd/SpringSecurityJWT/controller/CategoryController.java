@@ -47,6 +47,8 @@ public class CategoryController {
         return categoryService.createCategory(category);
     }
 
+
+    //this methode to do update of category by id
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateCategory(@PathVariable(value = "id") Long categoryId, @RequestBody Category categoryDetails) {
         String resultMessage = categoryService.updateCategory(categoryId, categoryDetails);
