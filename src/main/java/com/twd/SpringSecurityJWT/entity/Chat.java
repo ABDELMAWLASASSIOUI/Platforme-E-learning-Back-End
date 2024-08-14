@@ -18,19 +18,14 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
     @ManyToMany(mappedBy = "chats")
     @JsonIgnore
     private Set<OurUsers> ourUsersSet;
-
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Message> messages;
-
     public Chat() {
-
     }
 
     // Getters, Setters, Constructors
