@@ -110,7 +110,8 @@ public class AuthService {
     public ReqRes deleteUser(Integer id) {
         ReqRes response = new ReqRes();
         try {
-            ourUserRepo.deleteById(id);
+            OurUsers user = ourUserRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+            ourUserRepo.delete(user);
             response.setStatusCode(200);
             response.setMessage("User Deleted Successfully");
         } catch (Exception e) {

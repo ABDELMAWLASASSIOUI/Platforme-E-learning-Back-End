@@ -22,12 +22,12 @@ public class AdminCourseController {
     @Autowired
     private OurUserRepo ourUsersRepository;
 
-    @GetMapping
+    @GetMapping ("/user/all/courses")
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
-    @GetMapping("/admin/get/{id}")
+    @GetMapping("/admin/get/course/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
         return courseRepository.findById(id)
                 .map(course -> ResponseEntity.ok().body(course))
@@ -39,7 +39,7 @@ public class AdminCourseController {
         return courseRepository.save(course);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/update/course/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
         return courseRepository.findById(id)
                 .map(course -> {
@@ -53,7 +53,7 @@ public class AdminCourseController {
     }
 
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping("/admin/delete/course/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long id) {
         return courseRepository.findById(id)
                 .map(course -> {
@@ -68,7 +68,7 @@ public class AdminCourseController {
 
 
 
-    @PostMapping("/{courseId}/user/{userId}")
+    @PostMapping("/{courseId}/user/{userId}") //not testiong is corect or not
     public ResponseEntity<Course> assignUserToCourse(@PathVariable Long courseId, @PathVariable Integer userId) {
         Optional<OurUsers> userOptional = ourUsersRepository.findById(userId);
         Optional<Course> courseOptional = courseRepository.findById(courseId);
@@ -84,7 +84,7 @@ public class AdminCourseController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{userId}")//not testiong is corect or not
     public ResponseEntity<List<Course>> getCoursesByUser(@PathVariable Integer userId) {
         Optional<OurUsers> userOptional = ourUsersRepository.findById(userId);
 

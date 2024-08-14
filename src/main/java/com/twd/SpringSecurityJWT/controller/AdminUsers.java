@@ -3,6 +3,7 @@ package com.twd.SpringSecurityJWT.controller;
 import com.twd.SpringSecurityJWT.dto.ReqRes;
 import com.twd.SpringSecurityJWT.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,13 @@ public class AdminUsers {
     @DeleteMapping("/user/delete-user/{id}")
     public ResponseEntity<ReqRes> deleteUser(@PathVariable Integer id) {
         ReqRes response = authService.deleteUser(id);
+
+        if (response.getStatusCode() == HttpStatus.OK.value()) {
+            response.setMessage("L'utilisateur avec l'ID " + id + " a été supprimé avec succès.");
+        } else {
+            response.setMessage("La suppression de l'utilisateur avec l'ID " + id + " a échoué.");
+        }
+
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
