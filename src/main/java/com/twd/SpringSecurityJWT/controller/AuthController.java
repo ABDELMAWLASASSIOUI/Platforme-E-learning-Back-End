@@ -2,6 +2,7 @@ package com.twd.SpringSecurityJWT.controller;
 
 import com.twd.SpringSecurityJWT.dto.ReqRes;
 import com.twd.SpringSecurityJWT.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ReqRes> signUp(@RequestBody ReqRes signUpRequest){
+    public ResponseEntity<ReqRes> signUp(@Valid @RequestBody ReqRes signUpRequest){
         return ResponseEntity.ok(authService.signUp(signUpRequest));
     }
     @PostMapping("/signin")

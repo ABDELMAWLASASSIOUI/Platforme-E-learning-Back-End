@@ -3,6 +3,10 @@ package com.twd.SpringSecurityJWT.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,13 +25,16 @@ public class OurUsers implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is mandatory")
     private String email;
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-
-
     private String image;
+    @NotBlank(message = "Address is mandatory")
     private String address;
+    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Birth date must be in the format yyyy-MM-dd")
     private Date birth_date;
     @OneToMany(mappedBy = "user")
     private Set<Message> messages;
@@ -39,6 +46,7 @@ public class OurUsers implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "chat_id")
     )
     private Set<Chat> chats;
+    @Pattern(regexp = "ADMIN|USER", message = "Role must be ADMIN or USER")
     private String role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

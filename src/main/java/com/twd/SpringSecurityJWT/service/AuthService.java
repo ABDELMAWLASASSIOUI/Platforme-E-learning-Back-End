@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -23,27 +24,40 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public ReqRes signUp(ReqRes registrationRequest){
+    public ReqRes signUp(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
         try {
+            // Vérifier si l'utilisateur existe déjà
+            Optional<OurUsers> existingUser = ourUserRepo.findByEmail(registrationRequest.getEmail());
+            if (existingUser.isPresent()) {
+                // Si l'utilisateur existe, retourner un message d'erreur clair
+                resp.setMessage("User with this email already exists");
+                resp.setStatusCode(400);
+                return resp;
+            }
+
+            // Créer un nouvel utilisateur et le sauvegarder
             OurUsers ourUsers = new OurUsers();
             ourUsers.setEmail(registrationRequest.getEmail());
             ourUsers.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
             ourUsers.setBirth_date(registrationRequest.getBirth_date());
             ourUsers.setAddress(registrationRequest.getAddress());
             ourUsers.setRole(registrationRequest.getRole());
+
             OurUsers ourUserResult = ourUserRepo.save(ourUsers);
-            if (ourUserResult != null && ourUserResult.getId()>0) {
+            if (ourUserResult != null && ourUserResult.getId() > 0) {
                 resp.setOurUsers(ourUserResult);
                 resp.setMessage("User Saved Successfully");
                 resp.setStatusCode(200);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             resp.setStatusCode(500);
-            resp.setError(e.getMessage());
+            resp.setError("An unexpected error occurred: " + e.getMessage());
         }
         return resp;
     }
+
+
 
     public ReqRes signIn(ReqRes signinRequest){
         ReqRes response = new ReqRes();
