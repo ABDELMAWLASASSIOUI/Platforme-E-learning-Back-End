@@ -77,7 +77,12 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.6.0</version>
 		</dependency>
-
+		<!-- add swagger for to do Token interface-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>1.6.15</version>
+		</dependency>
 	</dependencies>
 
 	<build>
