@@ -27,23 +27,26 @@ public class AuthService {
     public ReqRes signUp(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
         try {
-            // Vérifier si l'utilisateur existe déjà
+            // Check if the user already exists
             Optional<OurUsers> existingUser = ourUserRepo.findByEmail(registrationRequest.getEmail());
             if (existingUser.isPresent()) {
-                // Si l'utilisateur existe, retourner un message d'erreur clair
                 resp.setMessage("User with this email already exists");
                 resp.setStatusCode(400);
                 return resp;
             }
 
-            // Créer un nouvel utilisateur et le sauvegarder
+            // Create a new user and set the role to USER by default
             OurUsers ourUsers = new OurUsers();
             ourUsers.setEmail(registrationRequest.getEmail());
             ourUsers.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
             ourUsers.setBirth_date(registrationRequest.getBirth_date());
             ourUsers.setAddress(registrationRequest.getAddress());
-            ourUsers.setRole(registrationRequest.getRole());
+            ourUsers.setName(registrationRequest.getName());
 
+            // Set the role to USER by default, you can also check if it's null or empty first
+            ourUsers.setRole("USER");
+
+            // Save the new user
             OurUsers ourUserResult = ourUserRepo.save(ourUsers);
             if (ourUserResult != null && ourUserResult.getId() > 0) {
                 resp.setOurUsers(ourUserResult);
@@ -56,6 +59,7 @@ public class AuthService {
         }
         return resp;
     }
+
 
 
 
@@ -134,4 +138,5 @@ public class AuthService {
         }
         return response;
     }
+
 }

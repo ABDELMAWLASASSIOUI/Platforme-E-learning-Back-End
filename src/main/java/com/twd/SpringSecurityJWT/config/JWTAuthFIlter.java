@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class JWTAuthFIlter extends OncePerRequestFilter {
+public class JWTAuthFIlter extends OncePerRequestFilter { //OncePerRequestFilter:class abstract
 
     @Autowired
     private JWTUtils jwtUtils;
@@ -34,12 +34,12 @@ public class JWTAuthFIlter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        jwtToken = authHeader.substring(7);
-        userEmail = jwtUtils.extractUsername(jwtToken);
+        jwtToken = authHeader.substring(7);//extraire la partie token avec se trouve b
+        userEmail = jwtUtils.extractUsername(jwtToken);// a p
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = ourUserDetailsService.loadUserByUsername(userEmail);
 
-            if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
+            if (jwtUtils.isTokenValid(jwtToken,userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

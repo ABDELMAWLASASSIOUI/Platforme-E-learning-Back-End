@@ -27,6 +27,7 @@ public class OurUsers implements UserDetails {
     private Integer id;
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is mandatory")
+    @Column(nullable = false, unique = true)
     private String email;
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
@@ -36,8 +37,10 @@ public class OurUsers implements UserDetails {
     private String address;
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Birth date must be in the format yyyy-MM-dd")
     private Date birth_date;
+    private String name;
     @OneToMany(mappedBy = "user")
     private Set<Message> messages;
+
 
     @ManyToMany
     @JoinTable(

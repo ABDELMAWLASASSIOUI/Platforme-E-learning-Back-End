@@ -44,17 +44,22 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("USER")
                         .requestMatchers("/admin_user/**").hasAnyAuthority("USER", "ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()) //
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         jwtAuthFIlter, UsernamePasswordAuthenticationFilter.class
-                );
+                );//jwtAuthFilter sera exécuté pour toutes les requêtes avant toute vérification des rôles ou des autorités.
+                  //Ajoute le jwtAuthFilter avant le filtre UsernamePasswordAuthenticationFilter. Ce filtre (jwtAuthFilter) est
+                // appliqué à toutes les requêtes pour vérifier la validité du jeton JWT avant d'essayer de traiter l'authentification.
+
+
+
         return httpSecurity.build();
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    @Bean //Le bean retourné est enregistré dans le contexte d'application et peut être injecté dans d'autres composants
+    public AuthenticationProvider authenticationProvider() { //authenticationProvider :une implémentation de l'interface AuthenticationProvider
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();// utilisée pour l'authentification basée sur les données d'un UserDetailsService et un PasswordEncoder
         daoAuthenticationProvider.setUserDetailsService(ourUserDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;

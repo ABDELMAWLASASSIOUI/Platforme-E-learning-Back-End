@@ -6,7 +6,6 @@ import com.twd.SpringSecurityJWT.entity.OurUsers;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,4 +26,6 @@ public class ReqRes {
     private String image;
     private String address;
     private Date birth_date;
+
+
 }
