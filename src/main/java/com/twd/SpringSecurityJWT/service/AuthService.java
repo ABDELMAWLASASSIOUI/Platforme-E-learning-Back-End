@@ -3,14 +3,14 @@ package com.twd.SpringSecurityJWT.service;
 import com.twd.SpringSecurityJWT.dto.ReqRes;
 import com.twd.SpringSecurityJWT.entity.OurUsers;
 import com.twd.SpringSecurityJWT.repository.OurUserRepo;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuthService {
@@ -23,6 +23,7 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+    private Set<String> blacklistedTokens = new HashSet<>();
 
     public ReqRes signUp(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
@@ -138,5 +139,12 @@ public class AuthService {
         }
         return response;
     }
+
+
+
+
+
+
+
 
 }
