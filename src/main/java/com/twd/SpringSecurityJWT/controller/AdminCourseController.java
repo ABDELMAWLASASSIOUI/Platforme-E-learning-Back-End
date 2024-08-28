@@ -1,8 +1,11 @@
 package com.twd.SpringSecurityJWT.controller;
 
 
+import com.twd.SpringSecurityJWT.dto.CourseDTO;
+import com.twd.SpringSecurityJWT.entity.Category;
 import com.twd.SpringSecurityJWT.entity.Course;
 import com.twd.SpringSecurityJWT.entity.OurUsers;
+import com.twd.SpringSecurityJWT.repository.CategoryRepository;
 import com.twd.SpringSecurityJWT.repository.CourseRepository;
 import com.twd.SpringSecurityJWT.repository.OurUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +23,13 @@ public class AdminCourseController {
     private CourseRepository courseRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private OurUserRepo ourUsersRepository;
 
-    @GetMapping ("/user/all/courses")
+
+    @GetMapping ("/admin/all/courses")
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
@@ -34,9 +41,37 @@ public class AdminCourseController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    //    @PostMapping("/admin/save")
+//    public Course createCourse(@RequestBody Course course) {
+//        System.out.println("Received Course: " + course); // Debugging line
+//        System.out.println("Course Name: " + course.getName());
+//        System.out.println("Course Description: " + course.getDescription());
+//        System.out.println("Category ID: " + (course.getCategory() != null ? course.getCategory().getId() : null));
+//        System.out.println("User ID: " + (course.getOurUser() != null ? course.getOurUser().getId() : null));
+//
+//        return courseRepository.save(course);
+//    }
     @PostMapping("/admin/save")
-    public Course createCourse(@RequestBody Course course) {
-        return courseRepository.save(course);
+    public ResponseEntity<Course> saveCourse(@RequestBody CourseDTO courseDTO) {
+        // Log the incoming courseDTO to check values
+        System.out.println("Received CourseDTO: " + courseDTO);
+
+        // Assuming CourseDTO contains categoryId and ourUsersId
+        Course course = new Course();
+        course.setName(courseDTO.getName());
+        course.setDescription(courseDTO.getDescription());
+
+        // Fetch Category and OurUsers objects using the provided IDs
+        Category category = categoryRepository.findById(courseDTO.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        OurUsers ourUser = ourUsersRepository.findById(Math.toIntExact(courseDTO.getOurUsersId()))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        course.setCategory(category);
+        course.setOurUser(ourUser);
+
+        Course savedCourse = courseRepository.save(course);
+        return ResponseEntity.ok(savedCourse);
     }
 
     @PutMapping("/admin/update/course/{id}")
@@ -96,6 +131,13 @@ public class AdminCourseController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/admin/users")//not testiong is corect or not
+    public ResponseEntity<List<OurUsers>> getAllUsers() {
+        List<OurUsers> users = ourUsersRepository.findAll();
+
+        return ResponseEntity.ok(users);
 
 }
 
+
+}
