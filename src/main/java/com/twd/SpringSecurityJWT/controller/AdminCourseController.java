@@ -75,17 +75,32 @@ public class AdminCourseController {
     }
 
     @PutMapping("/admin/update/course/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
+    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody CourseDTO courseDTO) {
+        // Log the incoming courseDTO to check values
+        System.out.println("Received CourseDTO: " + courseDTO);
+
         return courseRepository.findById(id)
                 .map(course -> {
-                    course.setName(courseDetails.getName());
-                    course.setDescription(courseDetails.getDescription());
-                    course.setOurUsers(courseDetails.getOurUsers());
+                    // Update course fields with values from the DTO
+                    course.setName(courseDTO.getName());
+                    course.setDescription(courseDTO.getDescription());
+
+                    // Fetch and set Category and OurUsers using the provided IDs
+                    Category category = categoryRepository.findById(courseDTO.getCategoryId())
+                            .orElseThrow(() -> new RuntimeException("Category not found"));
+                    OurUsers ourUser = ourUsersRepository.findById(Math.toIntExact(courseDTO.getOurUsersId()))
+                            .orElseThrow(() -> new RuntimeException("User not found"));
+
+                    course.setCategory(category);
+                    course.setOurUser(ourUser);
+
+                    // Save the updated course
                     Course updatedCourse = courseRepository.save(course);
                     return ResponseEntity.ok().body(updatedCourse);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
 
     @DeleteMapping("/admin/delete/course/{id}")
