@@ -8,6 +8,7 @@ import com.twd.SpringSecurityJWT.entity.OurUsers;
 import com.twd.SpringSecurityJWT.repository.CategoryRepository;
 import com.twd.SpringSecurityJWT.repository.CourseRepository;
 import com.twd.SpringSecurityJWT.repository.OurUserRepo;
+import com.twd.SpringSecurityJWT.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,8 @@ public class AdminCourseController {
     @Autowired
     private OurUserRepo ourUsersRepository;
 
-
+    @Autowired
+    private CategoryService categoryService;
     @GetMapping ("/admin/all/courses")
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
@@ -157,6 +159,10 @@ public class AdminCourseController {
         return ResponseEntity.ok(users);
 
 }
+    @GetMapping("/user/categories/all")
+    public List<Category> getAllCategories() {
+        return categoryService.getAllCategories();
+    }
 
 
 }
