@@ -33,6 +33,10 @@ public class AdminCourseController {
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
+    @GetMapping ("/user/all/courses")
+    public List<Course> getAllCoursesUser() {
+        return courseRepository.findAll();
+    }
 
     @GetMapping("/admin/get/course/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
