@@ -1,12 +1,9 @@
 package com.twd.SpringSecurityJWT.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Set;
-
 
 @Entity
 public class Image {
@@ -17,16 +14,11 @@ public class Image {
     private String name;
     private String type;
 
-
-
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] data;
 
     // Getters and setters
-
-
-
     public Long getId() {
         return id;
     }

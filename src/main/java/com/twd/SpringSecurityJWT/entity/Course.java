@@ -1,12 +1,15 @@
 package com.twd.SpringSecurityJWT.entity;
 
 
+
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
 
 @Entity
 public class Course {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,30 +17,29 @@ public class Course {
     private String name;
     private String description;
 
-    // Constructeurs, getters et setters
-
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private OurUsers ourUsers;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-
-
     @ManyToOne
     @JoinColumn(name = "image_id")
-    private Image image; // Nouvelle relation avec Image
-    public Course() {
-    }
+    private Image image;
 
-    public Course(String name, String description,OurUsers ourUsers,Category category,Image image) {
+    public Course() {}
+
+    // Méthode pour dissocier les relations avant suppression
+
+
+    public Course(String name, String description, OurUsers ourUsers, Category category, Image image) {
         this.name = name;
         this.description = description;
-        this.ourUsers=ourUsers;
-        this.category=category;
-        this.image=image;
+        this.ourUsers = ourUsers;
+        this.category = category;
+        this.image = image;
     }
 
     public Long getId() {
@@ -63,6 +65,7 @@ public class Course {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public OurUsers getOurUsers() {
         return ourUsers;
     }
@@ -79,10 +82,6 @@ public class Course {
         this.category = category;
     }
 
-
-    public OurUsers getOurUser() {  // Ensure this method exists
-        return ourUsers;
-    }
     public Image getImage() {
         return image;
     }
@@ -91,18 +90,5 @@ public class Course {
         this.image = image;
     }
 
-    public void setOurUser(OurUsers ourUser) {
-        this.ourUsers = ourUser;
-    }
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", categoryId=" + (category != null ? category.getId() : null) +
-                ", ourUsersId=" + (ourUsers != null ? ourUsers.getId() : null) +
-                ", imageId=" + (image != null ? image.getId() : null) +
-            '}';
-}
+
 }

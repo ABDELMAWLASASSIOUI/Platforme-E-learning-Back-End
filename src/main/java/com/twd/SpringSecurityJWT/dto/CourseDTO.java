@@ -1,15 +1,13 @@
 package com.twd.SpringSecurityJWT.dto;
 
-
 import lombok.Data;
 
 @Data
 public class CourseDTO {
     private String name;
     private String description;
-    private Long categoryId;  // or Integer/Long depending on your ID type
+    private Long categoryId;
     private Long ourUsersId;
-    private Long imageId;  // Champ ajouté pour l'image
-
-    // Getters and Setters
+    private Long imageId;  // Add this field to reference the image
+    private String imageData;  // Image data as Base64 string
 }
