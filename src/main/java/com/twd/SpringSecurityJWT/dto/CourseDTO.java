@@ -9,6 +9,7 @@ public class CourseDTO {
     private String description;
     private Long categoryId;  // or Integer/Long depending on your ID type
     private Long ourUsersId;
+    private Long imageId;  // Champ ajouté pour l'image
 
     // Getters and Setters
 }

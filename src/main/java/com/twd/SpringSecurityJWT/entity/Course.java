@@ -24,14 +24,20 @@ public class Course {
     @JoinColumn(name = "category_id")
     private Category category;
 
+
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image; // Nouvelle relation avec Image
     public Course() {
     }
 
-    public Course(String name, String description,OurUsers ourUsers,Category category) {
+    public Course(String name, String description,OurUsers ourUsers,Category category,Image image) {
         this.name = name;
         this.description = description;
         this.ourUsers=ourUsers;
         this.category=category;
+        this.image=image;
     }
 
     public Long getId() {
@@ -77,6 +83,13 @@ public class Course {
     public OurUsers getOurUser() {  // Ensure this method exists
         return ourUsers;
     }
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
     public void setOurUser(OurUsers ourUser) {
         this.ourUsers = ourUser;
@@ -89,6 +102,7 @@ public class Course {
                 ", description='" + description + '\'' +
                 ", categoryId=" + (category != null ? category.getId() : null) +
                 ", ourUsersId=" + (ourUsers != null ? ourUsers.getId() : null) +
+                ", imageId=" + (image != null ? image.getId() : null) +
             '}';
 }
 }

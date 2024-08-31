@@ -4,11 +4,13 @@ package com.twd.SpringSecurityJWT.controller;
 import com.twd.SpringSecurityJWT.dto.CourseDTO;
 import com.twd.SpringSecurityJWT.entity.Category;
 import com.twd.SpringSecurityJWT.entity.Course;
+import com.twd.SpringSecurityJWT.entity.Image;
 import com.twd.SpringSecurityJWT.entity.OurUsers;
 import com.twd.SpringSecurityJWT.repository.CategoryRepository;
 import com.twd.SpringSecurityJWT.repository.CourseRepository;
 import com.twd.SpringSecurityJWT.repository.OurUserRepo;
 import com.twd.SpringSecurityJWT.service.CategoryService;
+import com.twd.SpringSecurityJWT.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ public class AdminCourseController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ImageService imageService;
     @GetMapping ("/admin/all/courses")
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
@@ -58,7 +62,7 @@ public class AdminCourseController {
 //        return courseRepository.save(course);
 //    }
     @PostMapping("/admin/save")
-    public ResponseEntity<Course> saveCourse(@RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<?> saveCourse(@RequestBody CourseDTO courseDTO) {
         // Log the incoming courseDTO to check values
         System.out.println("Received CourseDTO: " + courseDTO);
 
@@ -66,7 +70,7 @@ public class AdminCourseController {
         Course course = new Course();
         course.setName(courseDTO.getName());
         course.setDescription(courseDTO.getDescription());
-
+        Image image = imageService.getImage(courseDTO.getImageId());
         // Fetch Category and OurUsers objects using the provided IDs
         Category category = categoryRepository.findById(courseDTO.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -75,9 +79,17 @@ public class AdminCourseController {
 
         course.setCategory(category);
         course.setOurUser(ourUser);
-
+        course.setImage(image);  // Set the image to the course//
         Course savedCourse = courseRepository.save(course);
-        return ResponseEntity.ok(savedCourse);
+
+        // Check if the course was successfully saved
+        if (savedCourse != null && savedCourse.getId() != null) {
+            return ResponseEntity.ok(savedCourse);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to save the course.");
+        }
+      // return ResponseEntity.ok(savedCourse);
     }
 
     @PutMapping("/admin/update/course/{id}")
@@ -90,13 +102,13 @@ public class AdminCourseController {
                     // Update course fields with values from the DTO
                     course.setName(courseDTO.getName());
                     course.setDescription(courseDTO.getDescription());
-
+                    Image image = imageService.getImage(courseDTO.getImageId());
                     // Fetch and set Category and OurUsers using the provided IDs
                     Category category = categoryRepository.findById(courseDTO.getCategoryId())
                             .orElseThrow(() -> new RuntimeException("Category not found"));
                     OurUsers ourUser = ourUsersRepository.findById(Math.toIntExact(courseDTO.getOurUsersId()))
                             .orElseThrow(() -> new RuntimeException("User not found"));
-
+                    course.setImage(image);  // Set the image to the course//
                     course.setCategory(category);
                     course.setOurUser(ourUser);
 
