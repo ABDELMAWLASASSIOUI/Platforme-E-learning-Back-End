@@ -44,6 +44,7 @@ public class AdminUserInitializer {
 
                 ourUserRepo.save(adminUser2);
             }
+
         };
     }
 }

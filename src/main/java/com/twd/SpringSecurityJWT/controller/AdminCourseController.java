@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/admin")
 public class AdminCourseController {
 
     @Autowired
@@ -39,7 +38,7 @@ public class AdminCourseController {
     @Autowired
     private ImageService imageService;
 
-    @GetMapping("/all/courses")
+    @GetMapping("/admin/all/courses")
     public List<CourseDTO> getAllCourses() {
         return courseRepository.findAll().stream().map(course -> {
             CourseDTO courseDTO = new CourseDTO();
@@ -60,8 +59,30 @@ public class AdminCourseController {
             return courseDTO;
         }).collect(Collectors.toList());
     }
+    //parte of user
+    @GetMapping("/user/all/courses")
+    public List<CourseDTO> getAllCoursesOfUser() {
+        return courseRepository.findAll().stream().map(course -> {
+            CourseDTO courseDTO = new CourseDTO();
+            courseDTO.setName(course.getName());
+            courseDTO.setDescription(course.getDescription());
+            courseDTO.setCategoryId(course.getCategory().getId());
+            courseDTO.setOurUsersId(Long.valueOf(course.getOurUsers().getId()));
 
-    @PostMapping("/save")
+            // Convert image data to Base64 string
+            Image image = course.getImage();
+            if (image != null) {
+                //String base64Image = Base64Utils.encodeToString(image.getData());
+                String encodedString = Base64.getEncoder().encodeToString(image.getData());
+                courseDTO.setImageData("data:" + image.getType() + ";base64," + encodedString);
+                courseDTO.setImageId(image.getId());  // Set the image ID
+            }
+
+            return courseDTO;
+        }).collect(Collectors.toList());
+    }
+
+    @PostMapping("/admin/save")
     public ResponseEntity<?> saveCourse(@RequestBody CourseDTO courseDTO) {
         // Log the incoming courseDTO to check values
         System.out.println("Received CourseDTO: " + courseDTO);
@@ -91,7 +112,7 @@ public class AdminCourseController {
 
 
 
-    @PutMapping("/update/course/{name}")
+    @PutMapping("/admin/update/course/{name}")
     public ResponseEntity<?> updateCourse(@PathVariable String name, @RequestBody CourseDTO courseDTO) {
         // Log the incoming courseDTO to check values
         System.out.println("Received CourseDTO for update: " + courseDTO);
@@ -126,7 +147,7 @@ public class AdminCourseController {
 
 
 
-    @DeleteMapping("/delete/course/{name}")
+    @DeleteMapping("/admin/delete/course/{name}")
     public ResponseEntity<String> deleteCourse(@PathVariable String name) {
         Optional<Course> courseOptional = courseRepository.findByName(name);
         if (courseOptional.isPresent()) {
@@ -158,7 +179,7 @@ public class AdminCourseController {
 
    */
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/admin/user/{userId}")
     public ResponseEntity<List<Course>> getCoursesByUser(@PathVariable Long userId) {
         Optional<OurUsers> userOptional = ourUsersRepository.findById(Math.toIntExact(userId));
 
@@ -170,18 +191,23 @@ public class AdminCourseController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public ResponseEntity<List<OurUsers>> getAllUsers() {
         List<OurUsers> users = ourUsersRepository.findAll();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/categories/all")
+    @GetMapping("/admin/categories/all")
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
-
+//part of user
+@GetMapping("/user/categories/all")
+public ResponseEntity<List<Category>> getAllCategoriesOfUser() {
+    List<Category> categories = categoryService.getAllCategories();
+    return ResponseEntity.ok(categories);
+}
 
 
 }
