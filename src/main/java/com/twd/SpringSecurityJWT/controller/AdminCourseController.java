@@ -82,6 +82,7 @@ public class AdminCourseController {
         }).collect(Collectors.toList());
     }
 
+    /*
     @PostMapping("/admin/save")
     public ResponseEntity<?> saveCourse(@RequestBody CourseDTO courseDTO) {
         // Log the incoming courseDTO to check values
@@ -95,6 +96,37 @@ public class AdminCourseController {
         // Fetch Category and OurUsers objects using the provided IDs
         Category category = categoryRepository.findById(courseDTO.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
+        OurUsers ourUser = ourUsersRepository.findById(Math.toIntExact(courseDTO.getOurUsersId()))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        course.setCategory(category);
+        course.setOurUsers(ourUser);
+        course.setImage(image);  // Set the image to the course
+        Course savedCourse = courseRepository.save(course);
+
+        return new ResponseEntity<>(savedCourse, HttpStatus.CREATED);
+    }
+
+     */
+    @PostMapping("/admin/save")
+    public ResponseEntity<?> saveCourse(@RequestBody CourseDTO courseDTO) {
+        // Log the incoming courseDTO to check values
+        System.out.println("Received CourseDTO: " + courseDTO);
+
+        Course course = new Course();
+        course.setName(courseDTO.getName());
+        course.setDescription(courseDTO.getDescription());
+
+        Image image = imageService.getImage(courseDTO.getImageId());
+
+        // Fetch Category and OurUsers objects using the provided IDs
+        Optional<Category> categoryOptional = categoryRepository.findById(courseDTO.getCategoryId());
+        if (!categoryOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Category with ID " + courseDTO.getCategoryId() + " not found.");
+        }
+
+        Category category = categoryOptional.get();
         OurUsers ourUser = ourUsersRepository.findById(Math.toIntExact(courseDTO.getOurUsersId()))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

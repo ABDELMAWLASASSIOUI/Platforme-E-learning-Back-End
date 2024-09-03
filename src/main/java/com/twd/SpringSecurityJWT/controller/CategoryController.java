@@ -49,9 +49,9 @@ public class CategoryController {
 
 
     //this methode to do update of category by id
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable(value = "id") Long categoryId, @RequestBody Category categoryDetails) {
-        String resultMessage = categoryService.updateCategory(categoryId, categoryDetails);
+    @PutMapping("/update/{name}")
+    public ResponseEntity<String> updateCategory(@PathVariable(value = "name") String name, @RequestBody Category categoryDetails) {
+        String resultMessage = categoryService.updateCategory(name, categoryDetails);
         if (resultMessage.equals("Category updated successfully!")) {
             return ResponseEntity.ok(resultMessage);
         } else {
@@ -60,9 +60,9 @@ public class CategoryController {
     }
 
 
-    @DeleteMapping("/{id}")//is worked
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
-        boolean isDeleted = categoryService.deleteCategory(id); // Assuming deleteCategory returns a boolean
+    @DeleteMapping("/{name}")//is worked
+    public ResponseEntity<String> deleteCategory(@PathVariable String name) {
+        boolean isDeleted = categoryService.deleteCategory(name); // Assuming deleteCategory returns a boolean
 
         if (isDeleted) {
             return ResponseEntity.ok("Category successfully deleted.");
