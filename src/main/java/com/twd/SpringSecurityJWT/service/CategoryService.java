@@ -51,11 +51,11 @@ public class CategoryService {
     }
 
 
-    public boolean deleteCategory(String name) {
-        Optional<Category> categoryOptional = categoryRepository.findByName(name);
+    public boolean deleteCategory(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
 
         if (categoryOptional.isPresent()) {
-            categoryRepository.deleteByName(name);
+            categoryRepository.deleteById(id);
             return true; // Deletion was successful
         } else {
             return false; // Category not found, deletion failed

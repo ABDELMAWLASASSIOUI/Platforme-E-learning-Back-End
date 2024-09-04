@@ -59,9 +59,9 @@ public class CategoryController {
         }
     }
 
-
-    @DeleteMapping("/{name}")//is worked
-    public ResponseEntity<String> deleteCategory(@PathVariable String name) {
+/*
+    @DeleteMapping("/{id}")//is worked
+    public ResponseEntity<String> deleteCategory(@PathVariable L name) {
         boolean isDeleted = categoryService.deleteCategory(name); // Assuming deleteCategory returns a boolean
 
         if (isDeleted) {
@@ -71,5 +71,16 @@ public class CategoryController {
         }
     }
 
+ */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCategorie(@PathVariable Long id) {
+        boolean isDeleted = categoryService.deleteCategory(id);
+        if (isDeleted) {
+            return ResponseEntity.ok("Category successfully deleted.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category in not found or not be deleted");
+        }
+
+    }
 }
 
