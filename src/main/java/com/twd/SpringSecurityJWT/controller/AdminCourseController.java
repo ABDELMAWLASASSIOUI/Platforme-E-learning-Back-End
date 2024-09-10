@@ -1,5 +1,6 @@
 package com.twd.SpringSecurityJWT.controller;
 
+import com.twd.SpringSecurityJWT.dto.ChapterDTO;
 import com.twd.SpringSecurityJWT.dto.CourseDTO;
 import com.twd.SpringSecurityJWT.entity.*;
 import com.twd.SpringSecurityJWT.repository.CourseRepository;
@@ -12,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.util.Base64Utils;
 import java.util.Base64
-;
+        ;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
@@ -55,6 +56,15 @@ public class AdminCourseController {
                 courseDTO.setImageData("data:" + image.getType() + ";base64," + encodedString);
                 courseDTO.setImageId(image.getId());  // Set the image ID
             }
+            // Add chapters to the DTO
+            List<ChapterDTO> chapterDTOs = course.getChapters().stream().map(chapter -> {
+                ChapterDTO chapterDTO = new ChapterDTO();
+                chapterDTO.setId(chapter.getId()); // Set the chapter ID here
+                chapterDTO.setTitle(chapter.getTitle());
+                chapterDTO.setContent(chapter.getContent());
+                return chapterDTO;
+            }).collect(Collectors.toList());
+            courseDTO.setChapters(chapterDTOs);
 
             return courseDTO;
         }).collect(Collectors.toList());
@@ -234,12 +244,12 @@ public class AdminCourseController {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
-//part of user
-@GetMapping("/user/categories/all")
-public ResponseEntity<List<Category>> getAllCategoriesOfUser() {
-    List<Category> categories = categoryService.getAllCategories();
-    return ResponseEntity.ok(categories);
-}
+    //part of user
+    @GetMapping("/user/categories/all")
+    public ResponseEntity<List<Category>> getAllCategoriesOfUser() {
+        List<Category> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
 
 
 }
