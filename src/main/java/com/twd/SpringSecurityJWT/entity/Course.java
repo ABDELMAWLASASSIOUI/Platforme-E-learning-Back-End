@@ -103,6 +103,7 @@ public class Course {
         return chapters;
     }
 
+
     public void setChapters(List<Chapter> chapters) {
         this.chapters = chapters;
 }
