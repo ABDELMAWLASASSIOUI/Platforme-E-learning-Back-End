@@ -29,7 +29,12 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "image_id")
     private Image image;
+    /*
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Chapter> chapters;
+
+     */
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Chapter> chapters;
 
 

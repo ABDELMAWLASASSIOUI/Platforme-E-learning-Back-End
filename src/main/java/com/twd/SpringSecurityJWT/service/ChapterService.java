@@ -68,6 +68,16 @@ public class ChapterService {
 
         return chapterDTOs;
     }
+    // Delete a chapter by ID
+    // Delete a chapter by ID
+    public void deleteChapter(Long id) {
+        if (chapterRepository.existsById(id)) {
+            chapterRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Chapter not found with id: " + id);
+        }
+    }
+
 
 
     // Get a chapter by ID
@@ -77,8 +87,8 @@ public class ChapterService {
     }
 
     // Update a chapter
-    public ChapterDTO updateChapter(Long id, ChapterDTO chapterDetails) {
-        Chapter existingChapter = chapterRepository.findById(id).orElseThrow(() -> new RuntimeException("Chapter not found"));
+    public ChapterDTO updateChapter(String title, ChapterDTO chapterDetails) {
+        Chapter existingChapter = chapterRepository.findByTitle(title).orElseThrow(() -> new RuntimeException("Chapter not found"));
         existingChapter.setTitle(chapterDetails.getTitle());
         existingChapter.setContent(chapterDetails.getContent());
 
@@ -93,7 +103,13 @@ public class ChapterService {
     }
 
     // Delete a chapter
-    public void deleteChapter(Long id) {
-        chapterRepository.deleteById(id);
-}
+
+    // Get all chapters
+    public List<ChapterDTO> getAllChapters() {
+        List<Chapter> chapters = chapterRepository.findAll();
+        return chapters.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -35,16 +35,25 @@ public class ChapterController {
     }
 
     // Update a chapter
-    @PutMapping("/admin/update/chapterById/{id}")
-    public ResponseEntity<ChapterDTO> updateChapter(@PathVariable Long id, @RequestBody ChapterDTO chapterDetails) {
-        ChapterDTO updatedChapter = chapterService.updateChapter(id, chapterDetails);
+    @PutMapping("/admin/update/chapterByName/{name}")
+    public ResponseEntity<ChapterDTO> updateChapter(@PathVariable String name, @RequestBody ChapterDTO chapterDetails) {
+        ChapterDTO updatedChapter = chapterService.updateChapter(name, chapterDetails);
         return ResponseEntity.ok(updatedChapter);
     }
 
     // Delete a chapter
     @DeleteMapping("/admin/deleteById/{id}")
-    public ResponseEntity<Void> deleteChapter(@PathVariable Long id) {
-        chapterService.deleteChapter(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteChapter(@PathVariable Long id) {
+        try {
+            chapterService.deleteChapter(id);
+            return ResponseEntity.ok("Chapter deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/admin/getAllChapters")
+public List<ChapterDTO> getAllChapters() {
+    return chapterService.getAllChapters();
 }
 }

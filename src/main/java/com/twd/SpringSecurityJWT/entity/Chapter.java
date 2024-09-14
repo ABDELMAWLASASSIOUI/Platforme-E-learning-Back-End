@@ -16,10 +16,16 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
+
+    @Column(length = 100000)
     private String content;
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
 }
