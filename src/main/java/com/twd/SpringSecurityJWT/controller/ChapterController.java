@@ -35,9 +35,9 @@ public class ChapterController {
     }
 
     // Update a chapter
-    @PutMapping("/admin/update/chapterByName/{name}")
-    public ResponseEntity<ChapterDTO> updateChapter(@PathVariable String name, @RequestBody ChapterDTO chapterDetails) {
-        ChapterDTO updatedChapter = chapterService.updateChapter(name, chapterDetails);
+    @PutMapping("/admin/update/chapterByTitle/{title}")
+    public ResponseEntity<ChapterDTO> updateChapter(@PathVariable String title, @RequestBody ChapterDTO chapterDetails) {
+        ChapterDTO updatedChapter = chapterService.updateChapter(title, chapterDetails);
         return ResponseEntity.ok(updatedChapter);
     }
 

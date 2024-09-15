@@ -17,7 +17,8 @@ public class Chapter {
     private long id;
     private String title;
 
-    @Column(length = 100000)
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
     /*@ManyToOne
     @JoinColumn(name = "course_id")
