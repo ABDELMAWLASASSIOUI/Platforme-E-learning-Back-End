@@ -1,6 +1,7 @@
 package com.twd.SpringSecurityJWT.service;
 
 import com.twd.SpringSecurityJWT.dto.ReqRes;
+import com.twd.SpringSecurityJWT.entity.Image;
 import com.twd.SpringSecurityJWT.entity.OurUsers;
 import com.twd.SpringSecurityJWT.repository.OurUserRepo;
 import io.jsonwebtoken.Jwts;
@@ -23,6 +24,8 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private ImageService imageService;
     private Set<String> blacklistedTokens = new HashSet<>();
 
     public ReqRes signUp(ReqRes registrationRequest) {
@@ -111,9 +114,10 @@ public class AuthService {
             if (updateRequest.getPassword() != null && !updateRequest.getPassword().isEmpty()) {
                 user.setPassword(passwordEncoder.encode(updateRequest.getPassword()));
             }
-            user.setImage(updateRequest.getImage());
+            Image image=imageService.getImage(updateRequest.getImageId());
+            user.setImage(image);
             user.setAddress(updateRequest.getAddress());
-            user.setBirth_date(updateRequest.getBirth_date());
+            //user.setBirth_date(updateRequest.getBirth_date());
             OurUsers updatedUser = ourUserRepo.save(user);
             response.setOurUsers(updatedUser);
             response.setStatusCode(200);
@@ -139,6 +143,91 @@ public class AuthService {
         }
         return response;
     }
+
+/*
+    public ReqRes getUserById(Integer id) {
+        ReqRes response = new ReqRes();
+        try {
+            OurUsers user = ourUserRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+            response.setOurUsers(user);
+            response.setStatusCode(200);
+            response.setMessage("User retrieved successfully");
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setError(e.getMessage());
+        }
+        return response;
+    }
+
+ */
+public ReqRes getUserById(Integer id) {
+    ReqRes response = new ReqRes();
+    try {
+        OurUsers user = ourUserRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Set user details in response
+        response.setEmail(user.getEmail());
+        response.setPassword(user.getPassword());  // Be cautious about returning passwords in responses
+        response.setAddress(user.getAddress());
+        response.setBirth_date(user.getBirth_date());
+
+        // Handle image data if available
+        Image image = user.getImage();
+        if (image != null) {
+            String encodedString = Base64.getEncoder().encodeToString(image.getData());
+            response.setImageData("data:" + image.getType() + ";base64," + encodedString);
+            response.setImageId(image.getId());  // Set the image ID
+        }
+
+        response.setStatusCode(200);
+        response.setMessage("User retrieved successfully");
+        response.setOurUsers(user);
+
+    } catch (RuntimeException e) {
+        response.setStatusCode(404);
+        response.setError(e.getMessage());
+    } catch (Exception e) {
+        response.setStatusCode(500);
+        response.setError("An unexpected error occurred: " + e.getMessage());
+    }
+    return response;
+}
+
+
+
+    /*
+
+       public List<CourseDTO> getAllCourses() {
+        return courseRepository.findAll().stream().map(course -> {
+            CourseDTO courseDTO = new CourseDTO();
+            courseDTO.setName(course.getName());
+            courseDTO.setDescription(course.getDescription());
+            courseDTO.setCategoryId(course.getCategory().getId());
+            courseDTO.setOurUsersId(Long.valueOf(course.getOurUsers().getId()));
+
+            // Convert image data to Base64 string
+            Image image = course.getImage();
+            if (image != null) {
+                //String base64Image = Base64Utils.encodeToString(image.getData());
+                String encodedString = Base64.getEncoder().encodeToString(image.getData());
+                courseDTO.setImageData("data:" + image.getType() + ";base64," + encodedString);
+                courseDTO.setImageId(image.getId());  // Set the image ID
+            }
+            // Add chapters to the DTO
+            List<ChapterDTO> chapterDTOs = course.getChapters().stream().map(chapter -> {
+                ChapterDTO chapterDTO = new ChapterDTO();
+                chapterDTO.setId(chapter.getId()); // Set the chapter ID here
+                chapterDTO.setTitle(chapter.getTitle());
+                chapterDTO.setContent(chapter.getContent());
+                return chapterDTO;
+            }).collect(Collectors.toList());
+            courseDTO.setChapters(chapterDTOs);
+
+            return courseDTO;
+        }).collect(Collectors.toList());
+    }
+     */
 
 
 

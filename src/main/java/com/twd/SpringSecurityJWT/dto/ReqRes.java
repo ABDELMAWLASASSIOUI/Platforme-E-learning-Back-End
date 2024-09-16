@@ -18,14 +18,17 @@ public class ReqRes {
     private String token;
     private String refreshToken;
     private String expirationTime;
+
+
     private String name;
     private String email;
     private String role;
     private String password;
     private OurUsers ourUsers;
-    private String image;
+   // private String image;
     private String address;
     private Date birth_date;
-
+     private Long imageId;
+    private String imageData;
 
 }

@@ -32,8 +32,7 @@ public class OurUsers implements UserDetails {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    private String image;
-    @NotBlank(message = "Address is mandatory")
+
     private String address;
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Birth date must be in the format yyyy-MM-dd")
     private Date birth_date;
@@ -49,6 +48,13 @@ public class OurUsers implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "chat_id")
     )
     private Set<Chat> chats;
+
+
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @Pattern(regexp = "ADMIN|USER", message = "Role must be ADMIN or USER")
     private String role;
     @Override
@@ -81,11 +87,12 @@ public class OurUsers implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    public void setImage(String image) {
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
         this.image = image;
     }
 
-    public String getImage() {
-        return image;
-    }
 }
