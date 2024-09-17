@@ -50,7 +50,7 @@ public class CategoryController {
 
 
     //this methode to do update of category by id
-    @PutMapping("/update/{name}")
+  /*  @PutMapping("/update/{name}")
     public ResponseEntity<String> updateCategory(@PathVariable(value = "name") String name, @RequestBody Category categoryDetails) {
         String resultMessage = categoryService.updateCategory(name, categoryDetails);
         if (resultMessage.equals("Category updated successfully!")) {
@@ -60,7 +60,23 @@ public class CategoryController {
         }
     }
 
-/*
+   */
+    @PutMapping("/update/{name}")
+    public ResponseEntity<?> updateCategory(@PathVariable(value = "name") String name, @RequestBody CategoryDTO categoryDTO) {
+        try {
+            // Appeler le service pour mettre à jour la catégorie
+            CategoryDTO updatedCategory = categoryService.updateCategory(name, categoryDTO);
+            // Retourner une réponse 200 avec la catégorie mise à jour
+            return ResponseEntity.ok(updatedCategory);
+        } catch (Exception e) {
+            // Si la catégorie n'est pas trouvée, retourner une réponse 404
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found: " + name);
+        }
+    }
+
+
+
+    /*
     @DeleteMapping("/{id}")//is worked
     public ResponseEntity<String> deleteCategory(@PathVariable L name) {
         boolean isDeleted = categoryService.deleteCategory(name); // Assuming deleteCategory returns a boolean

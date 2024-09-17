@@ -68,6 +68,17 @@ public class CategoryService {
         }
     }
 
+    public CategoryDTO updateCategory(String name,CategoryDTO categoryDTO)
+    {
+        Category existeOrNotIdCategory=categoryRepository.findByName(name).orElseThrow(()-> new RuntimeException("this is name is not found"));
+          existeOrNotIdCategory.setName(categoryDTO.getName());
+          Image image=imageService.getImage(categoryDTO.getImageId());
+          existeOrNotIdCategory.setImage(image);
+        Category updateCategory=categoryRepository.save(existeOrNotIdCategory);
+
+          return convertDTO(updateCategory);
+    }
+
 
     public boolean deleteCategory(Long id) {
         Optional<Category> categoryOptional = categoryRepository.findById(id);
