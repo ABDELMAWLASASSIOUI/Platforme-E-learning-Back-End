@@ -76,7 +76,7 @@ public class CategoryService {
           existeOrNotIdCategory.setImage(image);
         Category updateCategory=categoryRepository.save(existeOrNotIdCategory);
 
-          return convertDTO(updateCategory);
+          return convertDTO(updateCategory);//add
     }
 
 
