@@ -117,6 +117,7 @@ public class AuthService {
             Image image=imageService.getImage(updateRequest.getImageId());
             user.setImage(image);
             user.setAddress(updateRequest.getAddress());
+            user.setName(updateRequest.getName());
             //user.setBirth_date(updateRequest.getBirth_date());
             OurUsers updatedUser = ourUserRepo.save(user);
             response.setOurUsers(updatedUser);
