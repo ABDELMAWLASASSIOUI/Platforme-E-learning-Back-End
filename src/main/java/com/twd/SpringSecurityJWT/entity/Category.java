@@ -18,6 +18,12 @@ public class Category {
     @NotNull(message = "the name of category is not null")
     private String name;
 
+
+
+    @OneToOne
+    @JoinColumn(name ="image_id")
+    private Image image;
+
     public Category(Long id, String name, Set<Course> courses) {
         this.id = id;
         this.name = name;
@@ -57,5 +63,12 @@ public class Category {
 
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
+    }
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }

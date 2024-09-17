@@ -1,6 +1,7 @@
 package com.twd.SpringSecurityJWT.controller;
 
 
+import com.twd.SpringSecurityJWT.dto.CategoryDTO;
 import com.twd.SpringSecurityJWT.entity.Category;
 import com.twd.SpringSecurityJWT.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class CategoryController {
     }
 
     @PostMapping("/add") //is worked
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    public CategoryDTO createCategory(@RequestBody CategoryDTO categoryDTO) {
+        return categoryService.createCategory(categoryDTO);
     }
 
 
