@@ -8,4 +8,5 @@ import lombok.Setter;
 public class CategoryDTO {
     private String name;
     private Long imageId;
+    private String imageData;
 }

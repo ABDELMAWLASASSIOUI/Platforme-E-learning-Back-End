@@ -19,9 +19,22 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    /*
     @GetMapping
     public List<Category> getAllCategories() {
         return categoryService.getAllCategories();
+    }
+
+     */
+    @GetMapping
+    public ResponseEntity<?> getAllCategories()
+    {
+        try {
+            return ResponseEntity.ok(categoryService.getAllCategorie());
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("the liste of categries is not found or to do probleme");
+        }
     }
 
     /*
