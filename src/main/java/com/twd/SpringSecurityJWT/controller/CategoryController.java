@@ -102,9 +102,9 @@ public class CategoryController {
     }
 
  */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategorie(@PathVariable Long id) {
-        boolean isDeleted = categoryService.deleteCategory(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<String> deleteCategorie(@PathVariable String name) {
+        boolean isDeleted = categoryService.deleteCategory(name);
         if (isDeleted) {
             return ResponseEntity.ok("Category successfully deleted.");
         } else {

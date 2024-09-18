@@ -122,14 +122,17 @@ public class CategoryService {
     }
 
 
-    public boolean deleteCategory(Long id) {
-        Optional<Category> categoryOptional = categoryRepository.findById(id);
+    public boolean deleteCategory(String name) {
+        Optional<Category> categoryOptional = categoryRepository.findByName(name);
 
         if (categoryOptional.isPresent()) {
-            categoryRepository.deleteById(id);
+            categoryRepository.delete(categoryOptional.get());
             return true; // Deletion was successful
         } else {
             return false; // Category not found, deletion failed
         }
     }
+
+
+
 }
