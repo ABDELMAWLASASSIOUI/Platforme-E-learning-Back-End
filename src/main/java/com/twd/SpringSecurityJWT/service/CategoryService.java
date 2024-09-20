@@ -4,6 +4,7 @@ import com.twd.SpringSecurityJWT.dto.CategoryDTO;
 import com.twd.SpringSecurityJWT.entity.Category;
 import com.twd.SpringSecurityJWT.entity.Image;
 import com.twd.SpringSecurityJWT.repository.CategoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
     @Autowired
     private ImageService imageService;
+
+
+    private ModelMapper modelMapper = new ModelMapper();//the way  is corect create Object is not to do injection
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
@@ -74,7 +78,8 @@ public class CategoryService {
         Image image=imageService.getImage(categoryDTO.getImageId());
         category.setImage(image);
         categoryRepository.save(category);
-        return convertDTO(category);
+        //return convertDTO(category);
+        return modelMapper.map(category,CategoryDTO.class);// convert entity to DTO
     }
 
 
@@ -118,7 +123,8 @@ public class CategoryService {
           existeOrNotIdCategory.setImage(image);
         Category updateCategory=categoryRepository.save(existeOrNotIdCategory);
 
-          return convertDTO(updateCategory);//add
+        //  return convertDTO(updateCategory);//add
+        return modelMapper.map(updateCategory,CategoryDTO.class);
     }
 
 
