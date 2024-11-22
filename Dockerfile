@@ -1,21 +1,24 @@
-# Utiliser une image Java officielle (OpenJDK)
-FROM openjdk:11-jdk-slim
+# Utiliser une image de base avec OpenJDK 17
+FROM openjdk:17-jdk-slim AS build
 
 # Installer Maven
 RUN apt-get update && apt-get install -y maven
 
-# Définir le répertoire de travail dans le container
+# Répertoire de travail
 WORKDIR /app
 
-# Copier le fichier pom.xml et les fichiers source dans le répertoire de travail
+# Copier le fichier pom.xml et les sources du projet
 COPY pom.xml .
 COPY src ./src
 
-# Compiler et packager l'application Java
-RUN mvn clean package
+# Télécharger les dépendances Maven
+RUN mvn dependency:go-offline
 
-# Exposer le port 8080 (ou tout autre port utilisé par votre application)
+# Compiler et packager l'application Java sans exécuter les tests
+RUN mvn clean package -DskipTests
+
+# Exposer le port utilisé par l'application (par défaut 8080)
 EXPOSE 8080
 
-# Exécuter l'application JAR
-CMD ["java", "-jar", "target/your-app.jar"]
+# Lancer l'application (modifier selon votre fichier JAR)
+CMD ["java", "-jar", "target/pharmacy_online_platforme.jar"]
